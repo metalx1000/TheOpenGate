@@ -80,8 +80,10 @@
             )
 
             //Comments
+            var comments=data[i].comments.toUpperCase();
+            comments = comments.replace(/(?:\r\n|\r|\n)/g, ', ');
             $("#" + data[i].pid).append($("<div>")
-              .text(data[i].comments.toUpperCase()) 
+              .text(comments) 
             )
           }
       });

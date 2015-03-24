@@ -48,6 +48,7 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
   <script>
+    var residents=<?php include('get_residents_json.php');?>;
     $(document).ready(function(){
       var url="get_history_json.php";
       $.getJSON( url, function( data ) {
@@ -96,6 +97,19 @@
               .text(data[i].comments.toUpperCase()) 
             )
 
+            //resident
+            var res_pid=data[i].res_pid;
+            for(var r=0;r<residents.length;r++){
+              if(residents[r].pid == res_pid){  
+                var lname = residents[r].lname.toUpperCase();
+                var fname = residents[r].fname.toUpperCase();
+                $("#" + data[i].pid).append($("<div>")
+                  .text("Visited: " + lname + ", " + fname)
+                  .addClass('resident')      
+                )
+
+              }
+            }
           }
       });
 
