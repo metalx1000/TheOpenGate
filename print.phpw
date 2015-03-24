@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Cook Book</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <style>
+    #alert {
+      top: 50px;
+      position: fixed;
+      width: 100%;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script>
+    function getUrlParameter(sParam)
+    {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) 
+        {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) 
+            {
+                return sParameterName[1];
+            }
+        }
+    }   
+    function get_json(pid){
+        var url="get_json.php?pid=" + pid;
+        $.getJSON( url, function( data ) {
+//            data.replace(/&quot;/g,'"');
+            $(".text").each(function(e){
+                var id=$(this).attr("id");
+                var input=$(this);
+                jQuery.each(data[0], function(i, val) {
+                    val=val.replace(/&quot;/g,'"');
+                    if(i == id){
+                        input.html(val);
+                        var text = val;
+                    }
+                });
+                //console.log(data[0].+""+id);
+            });
+        info=data[0];
+        });
+    }
+
+    $(document).ready(function(){
+        if(getUrlParameter('pid')){
+            $("#pid").val(getUrlParameter('pid'));
+            get_json(getUrlParameter('pid'));
+        }else{
+            $("#pid").val(generateKey());
+        }
+        $("#form1").submit(function(event){
+            event.preventDefault();
+            $("#alert").slideDown( "slow" ).delay( 3000 ).slideUp("slow");
+            $.post( "update.php", $( "#form1" ).serialize() );
+        });
+        $("#alert").click(function(){
+            $(this).slideUp("slow");
+        });
+
+        $("#home").click(function(){
+         window.location.href = "index.php"; 
+        });
+        
+    });
+  </script>
+
+</head>
+<body>
+  <?php include("nav.php");?>
+  <div class="container">
+    <div id="recipe_create">
+  <!--    <h2>Recipe Form</h2>-->
+      <br><br><br>
+        <div class="form-group">
+          <input type="hidden" id="pid" value="098" name="pid">
+        </div>
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <p type="text" class="text" id="title" name="title" placeholder="Enter Title"></p>
+        </div>
+        <div class="form-group">
+          <label for="prep_time">Prep Time:</label>
+          <p class="text" id="prep_time" name="prep_time" placeholder="Enter Prep Time"></p>
+        </div>
+        <div class="form-group">
+          <label for="cook_time">Cook Time:</label>
+          <a class="text" id="cook_time" name="cook_time"  placeholder="Enter Cook Time">
+        </div>
+        <div class="form-group">
+          <label for="total_time">Total Time:</label>
+          <input type="text" class="form-control" id="total_time" name="total_time" placeholder="Enter Total Time">
+        </div>
+        <div class="form-group">
+          <label for="yield">Yield:</label>
+          <input type="text" class="form-control" id="yield" name="yield" placeholder="Enter Yield Amount">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea cols="40" class="form-control" id="description" name="description" rows="10"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="ingredients">Ingredients:</label>
+          <textarea cols="40" class="form-control" id="ingredients" name="ingredients" rows="10"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="instructions">Instructions:</label>
+          <textarea cols="40" class="form-control" id="instructions" name="instructions" rows="10"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="comments">Comments:</label>
+          <textarea cols="40" class="form-control" id="comments" name="comments" rows="10"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category:</label>
+          <select class="form-control" id="category" name="category">
+            <option value=""></option>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="dessert">Dessert</option>
+            <option value="appetizer">Appetizer</option>
+            <option value="snack">Snack</option>
+            <option value="soup">Soup</option>
+            <option value="salad">Salad</option>
+            <option value="other">Other</option>
+          </select>          
+        </div>
+
+        <div class="form-group">
+          <label for="source">Source:</label>
+          <input type="text" class="form-control" id="source" name="source" placeholder="Enter who or where you got this recipe from">
+        </div>
+
+        <div class="form-group">
+          <label for="tags">Tags:</label>
+          <input type="text" class="form-control" id="tags" name="tags" placeholder="Enter Some Keywords">
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </div>
+  </div>
+
+    <div class="alert alert-info" id="alert" style="display: none">
+        <a href="#" >×</a>
+        <strong>Message:</strong> 
+        Entry Has been submitted!
+    </div>
+</body>
