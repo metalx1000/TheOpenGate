@@ -11,6 +11,25 @@
       position: fixed;
       width: 100%;
     }
+    .resident{
+      border: 2px solid #a1a1a1;
+      padding: 10px 40px; 
+      background: #dddddd;
+      border-radius: 25px;
+      /*height: 20px;
+      margin: 10px;
+      padding: 20px;*/
+      padding: 1em;
+      margin-bottom: 0.25em;
+      width: 100%;
+    }
+    body{
+      /*width:80%;*/
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1em;
+    }
+
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -42,23 +61,25 @@
     var gg;
     function get_json(pid){
         var url="search_residents_json.php?pid=" + pid;
-/*        $.getJSON( url, function( data ) {
-            data.replace(/&quot;/g,'"');
-            $(".form-control").each(function(e){
-                var id=$(this).attr("id");
-                var input=$(this);
-                jQuery.each(data[0], function(i, val) {
-                    val=val.replace(/&quot;/g,'"');
-                    if(i == id){
-                        input.val(val);
-                        var text = val;
-                    }
-                });
-                //console.log(data[0].+""+id);
-            });
-        info=data[0];
+        $.getJSON( url, function( data ) {
+          var id=data[0].id;
+          $("#resident").append($("<div>")
+            .text(data[0].lname + ", " + data[0].fname)
+            .addClass('resident')
+            .attr("id", data[0].pid)
+          )
+          
+          $("#" + data[0].pid).append($("<div>")
+              .text("Phone: " + data[0].phone1) 
+              .addClass('phone')
+          )
+
+          $("#" + data[0].pid).append($("<div>")
+              .text("Phone: " + data[0].phone2) 
+              .addClass('phone')
+          )
+
         });
-*/
     }
 
     $(document).ready(function(){
@@ -85,6 +106,11 @@
         });
         $("#alert").click(function(){
             $(this).slideUp("slow");
+        });
+
+        $("#resident").on('click','.resident',function(){
+          var pid = $("#res_pid").val();
+          window.location.href = "edit_residents.php?pid=" + pid;
         });
 
         $("#home").click(function(){
@@ -116,6 +142,9 @@
     <div id="visitors_create">
   <!--    <h2>Recipe Form</h2>-->
       <br><br><br>
+
+      <div id="resident"></div>
+
       <div class="form-group">
         <label for="license">Swipe License:</label>
         <input type="text" class="form-control" id="license" name="license" placeholder="Swipe License">
