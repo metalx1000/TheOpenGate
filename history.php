@@ -101,9 +101,9 @@
 
       $("#search").keyup(function(){
         var v=$(this).val().toUpperCase();
-        $(".resident").hide();
+        $(".visitors").hide();
         $( ".name:contains('"+v+"')" ).parent().show();
-        $( ".other:contains('"+v+"')" ).parent().show();
+        $( ".resident:contains('"+v+"')" ).parent().show();
       });
   
       $("#results").on('click','.resident',function(){
