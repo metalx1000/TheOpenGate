@@ -49,29 +49,37 @@
       var url="get_residents_json.php";
       $.getJSON( url, function( data ) {
           for(var i=0;i<data.length;i++){
-            $("#count").html("Currently " + data.length + " Recipes");
+            $("#count").html("Currently " + data.length + " Residents in Database");
             $("#results").append($("<div>")
                 .addClass('resident')
                 .attr("pid", data[i].pid)
                 .attr("id", data[i].pid)
             );
 
-            //title
+            //NAME
             var fname=data[i].fname.toUpperCase()
             var lname=data[i].lname.toUpperCase()
             $("#" + data[i].pid).append($("<div>")
                 .text(lname + ", " + fname)
                 .addClass('name')
             )
-  
-            //ingredients
+ 
+            //Residents
+            var residents=data[i].other_residents.toUpperCase();
+            residents = residents.replace(/(?:\r\n|\r|\n)/g, ', ');
+            $("#" + data[i].pid).append($("<div>")
+              .text("Other Residents: " + residents) 
+              .addClass('other')
+            )
+
+            //Guests
             var guests=data[i].guests.toUpperCase();
             guests = guests.replace(/(?:\r\n|\r|\n)/g, ', ');
             $("#" + data[i].pid).append($("<div>")
               .text("Guests Allowed: " + guests) 
             )
 
-            //tags
+            //Comments
             $("#" + data[i].pid).append($("<div>")
               .text(data[i].comments.toUpperCase()) 
             )
@@ -82,11 +90,12 @@
         var v=$(this).val().toUpperCase();
         $(".resident").hide();
         $( ".name:contains('"+v+"')" ).parent().show();
+        $( ".other:contains('"+v+"')" ).parent().show();
       });
   
       $("#results").on('click','.resident',function(){
         var pid = $(this).attr("pid");
-        window.location.href = "edit_residents.php?pid=" + pid;
+        window.location.href = "edit_visitors.php?pid=" + pid;
       });
 
       $("#new").click(function(){

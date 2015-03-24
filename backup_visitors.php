@@ -11,7 +11,7 @@ while($row = mysqli_fetch_array($result)) {
 }
 $json = json_encode($rows);
 
-$myfile = fopen("backups/residents-backup-".time().".json", "w") or die("Unable to open file!");
+$myfile = fopen("backups/visitors-backup-".time().".json", "w") or die("Unable to open file!");
 fwrite($myfile, $json);
 fclose($myfile);
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Residents</title>
+  <title>Visitors</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -42,8 +42,8 @@
     var gg;
     function get_json(pid){
         var url="search_residents_json.php?pid=" + pid;
-        $.getJSON( url, function( data ) {
-//            data.replace(/&quot;/g,'"');
+/*        $.getJSON( url, function( data ) {
+            data.replace(/&quot;/g,'"');
             $(".form-control").each(function(e){
                 var id=$(this).attr("id");
                 var input=$(this);
@@ -58,20 +58,30 @@
             });
         info=data[0];
         });
+*/
     }
 
     $(document).ready(function(){
+
+        $("#license").focus();
+
+        var d = new Date();
+        $("#timedate").val(d);
+        $("#pid").val(generateKey());
+
         if(getUrlParameter('pid')){
-            $("#pid").val(getUrlParameter('pid'));
+            $("#res_pid").val(getUrlParameter('pid'));
             get_json(getUrlParameter('pid'));
         }else{
-            $("#pid").val(generateKey());
         }
         $("#form1").submit(function(event){
             event.preventDefault();
+            var d = new Date();
+            $("#timedate").val(d);
             $("#alert").slideDown( "slow" ).delay( 3000 ).slideUp("slow");
-            $.post( "update_residents.php", $( "#form1" ).serialize() );
-            $.post("backup_residents.php");
+            $.post( "update_visitors.php", $( "#form1" ).serialize() );
+            $.post("backup_visitors.php");
+            setTimeout(function(){ window.location.replace("index.php") }, 3500);
         });
         $("#alert").click(function(){
             $(this).slideUp("slow");
@@ -80,21 +90,52 @@
         $("#home").click(function(){
          window.location.href = "index.php"; 
         });
-        
+       
+        $("#license").change(function(){
+          var data=$("#license").val();
+          $("#license2").val(data);
+          data=data.split("^");
+          var name = data[1].split("$");;
+          var lname = name[0];
+          var fname = name[1];
+          var city = data[0];
+          var address = data[2] + " " + city;
+          $("#lname").val(lname);
+          $("#fname").val(fname);
+          $("#address").val(address);
+          $("#license").val("");
+        });
     });
+    
   </script>
 
 </head>
 <body>
   <?php include("nav.php");?>
   <div class="container">
-    <div id="residents_create">
+    <div id="visitors_create">
   <!--    <h2>Recipe Form</h2>-->
       <br><br><br>
+      <div class="form-group">
+        <label for="license">Swipe License:</label>
+        <input type="text" class="form-control" id="license" name="license" placeholder="Swipe License">
+      </div>
+
       <form role="form" id="form1">
         <div class="form-group">
           <input type="hidden" id="pid" value="098" name="pid">
         </div>
+        <div class="form-group">
+          <input type="hidden" id="timedate" value="098" name="timedate">
+        </div>
+        <div class="form-group">
+          <input type="hidden" id="res_pid" value="098" name="res_pid">
+        </div>
+
+        <div class="form-group">
+          <input type="hidden" id="license2" name="license">
+        </div>
+
         <div class="form-group">
           <label for="fname">First Name:</label>
           <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
@@ -107,23 +148,17 @@
           <label for="address">Address:</label>
           <input type="text" class="form-control" id="address" name="address"  placeholder="Address">
         </div>
+<!--
         <div class="form-group">
           <label for="phone1">Phone #1:</label>
           <input type="text" class="form-control" id="phone1" name="phone1" placeholder="Phone #1">
         </div>
+-->
         <div class="form-group">
-          <label for="phone2">Phone #2:</label>
-          <input type="text" class="form-control" id="phone2" name="phone2" placeholder="Phone #2">
+          <label for="tags">Tags:</label>
+          <input type="text" class="form-control" id="tags" name="tags" placeholder="Tags">
         </div>
 
-        <div class="form-group">
-          <label for="other_residents">Other Residents:</label>
-          <textarea cols="40" class="form-control" id="other_residents" name="other_residents" rows="5"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="guests">Guests:</label>
-          <textarea cols="40" class="form-control" id="guests" name="guests" rows="5"></textarea>
-        </div>
         <div class="form-group">
           <label for="comments">Comments:</label>
           <textarea cols="40" class="form-control" id="comments" name="comments" rows="5"></textarea>
