@@ -96,12 +96,12 @@
           <input type="hidden" id="pid" value="098" name="pid">
         </div>
         <div class="form-group">
-          <label for="fname">First Name:</label>
-          <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
-        </div>
-        <div class="form-group">
           <label for="lname">Last Name:</label>
           <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+          <label for="fname">First Name:</label>
+          <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
         </div>
         <div class="form-group">
           <label for="address">Address:</label>
