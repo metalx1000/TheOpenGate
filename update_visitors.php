@@ -3,7 +3,7 @@ include("connect.php");
 include('tables.php');
 
 $_POST = array_map('strip_tags', $_POST);
-$_POST = array_map('htmlspecialchars', $_POST);
+//$_POST = array_map('htmlspecialchars', $_POST);
 //date format and time zone
 date_default_timezone_set('America/New_York');
 $date = date('l jS \of F Y h:i:s A');
